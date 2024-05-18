@@ -7,7 +7,7 @@
     "node": "18.x"
   },
   "scripts": {
-    "start": "node Blog-app/src/index.js"
+    "start": "node index.js"
   },
   "keywords": [
     "ritik",

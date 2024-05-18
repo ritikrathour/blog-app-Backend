@@ -1,7 +1,7 @@
  const dotenv = require("dotenv");
  dotenv.config({ path: "./.env" })
-const DBConnection = require("./dataBase/index.js");
-const app = require("./app.js");
+const DBConnection = require("./src/dataBase/index.js");
+const app = require("./src/app.js");
 // connecting data base 
 DBConnection().then(()=>{
     app.listen(process.env.PORT || 8000, () => {
