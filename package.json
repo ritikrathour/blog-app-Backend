@@ -4,6 +4,7 @@
   "description": "a basic app in backrnd",
   "main": "index.js", 
   "scripts": {
+    "dev":"nodemon index.js",
     "start": "node index.js"
   },
   "keywords": [
