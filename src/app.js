@@ -9,7 +9,7 @@ const path = require("path")
 
 // cors setup 
 app.use(cors({
-    origin:"https://mern-stack-blog-app-smoky.vercel.app",
+    origin:"https://mern-stack-blog-app-alpha.vercel.app",
     credentials:true
 })); 
 // middleweares
