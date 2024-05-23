@@ -54,8 +54,13 @@ const EditUserRole = asyncHandler(async (req, res) => {
         }
     }, {
         new: true
-    })
-    return res.status(200).cookie("accessToken", accessToken, { maxAge: 3 * 24 * 60 * 60 * 1000 }).json(new ApiResponse(200, updateRole, accessToken,"User Role Updated Successfully..."))
+    }) 
+    return res.status(200).cookie("accessToken", accessToken, {
+     secure: true,
+        httpOnly: true,
+        sameSite:"None",
+     maxAge: 3 * 24 * 60 * 60 * 1000 
+    }).json(new ApiResponse(200, updateRole, accessToken,"User Role Updated Successfully..."))
 })
 const SignIn = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
@@ -76,22 +81,17 @@ const SignIn = asyncHandler(async (req, res) => {
     const signInUser = await User.findById(user._id).select("-password -refreshToken");
     if (!signInUser) {
         throw new ApiError(401, "SomeThing went wrong!")
-    }
-    const options = {
-        secure: true,
-        httpOnly: true,
-        sameSite:true,
-        
-    }
+    } 
     res.status(200)
         .cookie("accessToken", accessToken, {
             secure: true,
             httpOnly: true,
-            sameSite:true, maxAge: 5 * 24 * 60 * 60 * 1000 })
+            sameSite:"None",
+         maxAge: 5 * 24 * 60 * 60 * 1000 })
         .cookie("refreshToken", refreshToken, {
             secure: true,
             httpOnly: true,
-            sameSite:true,
+            sameSite:"None",
             maxAge: 7 * 24 * 60 * 60 * 1000 }).json(
             new ApiResponse(200, { user: signInUser, accessToken }, "User Sign in successfully")
         )
@@ -111,7 +111,7 @@ const UpdateUserDetails = asyncHandler(async (req, res) => {
         }
     }, { new: true });
     const updatedUser = await User.findById(IsUpdatedUser._id).select("-password -refreshToken");
-    // return res.status(200).json(new ApiResponse(200, { user: updatedUser }, "User Updated Successfully..."))
+    return res.status(200).json(new ApiResponse(200, { user: updatedUser }, "User Updated Successfully..."))
 })
 const CorrentUser = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, req.user, "current user fetched successfully"))
@@ -153,9 +153,9 @@ const DeleteUser = asyncHandler(async (req, res) => {
     const options = {
         httpOnly: true,
         secure: true ,
-        sameSite:true
+        sameSite:"None"  
     }
-    res.status(200).clearCookie("accessToken", { expire: 360000 + Date.now() }, options).clearCookie("refreshToken", options).json(new ApiResponse(200, "User has been deleted"))
+    res.status(200).clearCookie("accessToken",{ expire: 360000 + Date.now() }, options).clearCookie("refreshToken", options).json(new ApiResponse(200, "User has been deleted"))
 })
 const SignOut = asyncHandler(async (req, res) => {
     console.log("snkdfhs");
@@ -167,8 +167,9 @@ const SignOut = asyncHandler(async (req, res) => {
         new: true
     })
     const options = {
-        httpOnly: true,
-        secure: true
+         httpOnly: true,
+        secure: true ,
+        sameSite:"None"  
     }
     res.status(200).clearCookie("accessToken", options).clearCookie("refreshToken", options).json(new ApiResponse(200, {}, "User Logged Out!"))
 })
@@ -187,7 +188,8 @@ const RefreshAccessToken = asyncHandler(async (req, res) => {
     }
     const options = {
         httpOnly: true,
-        secure: true
+        secure: true ,
+        sameSite:"None"  
     }
     const { accessToken, refreshToken } = await generateAccessTokenAndRefreshToken(user?._id);
     return res.status(200).cookie("accessToken", accessToken, options).cookie("refreshToken", refreshToken, options).json(new ApiResponse(200, { accessToken, refreshToken }, "accessToken refreshed"));
